@@ -2,6 +2,11 @@
 const express = require("express");
 const cors = require("cors");
 const { MongoClient, ServerApiVersion } = require("mongodb");
+const {
+    getAllUsers,
+    getSingleUser,
+    createUser,
+} = require("./controllers/user.controller");
 
 // create express server
 const app = express();
@@ -23,15 +28,54 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
         client.connect();
-        // create a collection for menu in SavoryDB
-        const menuCollection = client
+
+        // create a collection for user
+        const userCollection = client.db("SummerSchoolDB").collection("users");
+        // create a collection for classes
+        const classCollection = client
             .db("SummerSchoolDB")
-            .collection("students");
+            .collection("classes");
 
         // welcome message
         app.get("/", (req, res) => {
             res.status(200).json({ message: "welcome to server" });
         });
+
+        // get all users
+        app.get("/api/users", getAllUsers(userCollection));
+
+        // get single user
+        app.get("/api/single-user", getSingleUser(userCollection));
+
+        // create an user
+        app.post("/api/create-user", createUser(userCollection));
+
+        // get all reviews
+        // app.get("/api/reviews", getAllReview(reviewCollection));
+
+        // // find product by email
+        // app.get(
+        //     "/api/user-products/:email",
+        //     findProductByEmail(productsCollection)
+        // );
+
+        // // find product by category
+        // app.get(
+        //     "/api/product-category",
+        //     findProductByCategory(productsCollection)
+        // );
+
+        // // create product
+        // app.post("/api/create-product", createProduct(productsCollection));
+
+        // // update product
+        // app.put("/api/update-product/:id", updateProduct(productsCollection));
+
+        // // delete product
+        // app.delete(
+        //     "/api/delete-product/:id",
+        //     deleteProduct(productsCollection)
+        // );
 
         // not found error handling
         app.use((req, res, next) => {
