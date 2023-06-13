@@ -1,5 +1,6 @@
 // create an express server
 const express = require("express");
+// const bodyParser = require('body-parser')
 const cors = require("cors");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const {
@@ -12,6 +13,10 @@ const {
 const app = express();
 app.use(cors());
 app.use(express.json());
+// parse application/x-www-form-urlencoded
+// app.use(bodyParser.urlencoded({ extended: true }));
+// parse application/json
+// app.use(bodyParser.json());
 app.use(express.static("views"));
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version

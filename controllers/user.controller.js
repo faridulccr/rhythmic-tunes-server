@@ -15,8 +15,7 @@ const getAllUsers = (userCollection) => {
 // get single user by email
 const getSingleUser = (userCollection) => {
     return async (req, res) => {
-        const email = req.query;
-        const user = await userCollection.findOne({ email });
+        const user = await userCollection.findOne({ email: req.query?.email });
         // console.log(user);
 
         user
@@ -34,21 +33,20 @@ const createUser = (userCollection) => {
 
         if (existingUser) {
             return res.json({ message: "User already exist" });
-        } else {
-            const newUser = await userCollection.insertOne({
-                username,
-                email,
-                role,
-                selectedClasses: [],
-            });
-            // console.log(newUser);
-            newUser.acknowledged
-                ? res.status(200).json({ message: "User successfully created" })
-                : res.status(400).json({ error: "Bad Request" });
         }
+
+        const newUser = await userCollection.insertOne({
+            username,
+            email,
+            role,
+            selectedClasses: [],
+        });
+        // console.log(newUser);
+        newUser.acknowledged
+            ? res.status(200).json({ message: "User successfully created" })
+            : res.status(400).json({ error: "Bad Request" });
     };
 };
-
 
 // // update product
 // const updateProduct = (products) => {
@@ -84,5 +82,5 @@ const createUser = (userCollection) => {
 module.exports = {
     getAllUsers,
     getSingleUser,
-    createUser
+    createUser,
 };
