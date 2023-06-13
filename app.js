@@ -62,6 +62,12 @@ async function run() {
         // get all classes
         app.get("/api/classes", getAllClasses(classCollection));
 
+        // get all selected classes
+        // app.get(
+        //     "/api/selected-class",
+        //     getSelectedClass(classCollection)
+        // );
+
         // update class's seat
         app.put(
             "/api/selected-class",
