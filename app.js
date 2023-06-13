@@ -8,7 +8,10 @@ const {
     getSingleUser,
     createUser,
 } = require("./controllers/user.controller");
-const { getAllClasses } = require("./controllers/class.controller");
+const {
+    getAllClasses,
+    updateSelectedClass,
+} = require("./controllers/class.controller");
 
 // create express server
 const app = express();
@@ -58,6 +61,12 @@ async function run() {
 
         // get all classes
         app.get("/api/classes", getAllClasses(classCollection));
+
+        // update class's seat
+        app.put(
+            "/api/selected-class",
+            updateSelectedClass(userCollection, classCollection)
+        );
 
         // // find product by email
         // app.get(

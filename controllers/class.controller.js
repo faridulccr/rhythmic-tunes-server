@@ -10,6 +10,30 @@ const getAllClasses = (classCollection) => {
     };
 };
 
+// update class's seat
+const updateSelectedClass = (users, classes) => {
+    return async (req, res) => {
+        // Generate a new ObjectId
+        const { email, id } = req.query;
+        // update the user
+        const updatedUser = await users.updateOne(
+            { email: email },
+            { $push: { selectedClasses: id } }
+        );
+
+        // update class
+        const objectId = new ObjectId(id);
+        const updatedClass = await classes.updateOne(
+            { _id: objectId },
+            { $inc: { seats: -1 } }
+        );
+
+        updatedUser.acknowledged && updatedClass.acknowledged
+            ? res.status(200).json({ message: "successfully updated" })
+            : res.status(400).json({ error: "Bad Request" });
+    };
+};
+
 // // find product by email
 // const findProductByEmail = (products) => {
 //     return async (req, res) => {
@@ -48,4 +72,5 @@ const getAllClasses = (classCollection) => {
 
 module.exports = {
     getAllClasses,
+    updateSelectedClass,
 };

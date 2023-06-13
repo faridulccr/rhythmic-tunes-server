@@ -27,7 +27,7 @@ const getSingleUser = (userCollection) => {
 // create user
 const createUser = (userCollection) => {
     return async (req, res) => {
-        const { username, email, role } = req.body;
+        const { name, image, email, role, } = req.body;
         // find existing user
         const existingUser = await userCollection.findOne({ email });
 
@@ -36,7 +36,8 @@ const createUser = (userCollection) => {
         }
 
         const newUser = await userCollection.insertOne({
-            username,
+            name,
+            image,
             email,
             role,
             selectedClasses: [],
