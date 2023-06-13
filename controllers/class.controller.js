@@ -1,12 +1,11 @@
-
-// get all review
-const getAllReview = (reviewCollection) => {
+// get all classes
+const getAllClasses = (classCollection) => {
     return async (req, res) => {
-        const allReview = await reviewCollection.find().toArray();
-        // console.log(allReview);
+        const allClasses = await classCollection.find().toArray();
+        // console.log(allClasses);
 
-        allReview.length > 0
-            ? res.status(200).json(allReview)
+        allClasses.length > 0
+            ? res.status(200).json(allClasses)
             : res.status(404).json({ error: "data not found" });
     };
 };
@@ -46,3 +45,7 @@ const getAllReview = (reviewCollection) => {
 //             : res.status(500).json({ error: "data not found" });
 //     };
 // };
+
+module.exports = {
+    getAllClasses,
+};

@@ -8,6 +8,7 @@ const {
     getSingleUser,
     createUser,
 } = require("./controllers/user.controller");
+const { getAllClasses } = require("./controllers/class.controller");
 
 // create express server
 const app = express();
@@ -55,8 +56,8 @@ async function run() {
         // create an user
         app.post("/api/create-user", createUser(userCollection));
 
-        // get all reviews
-        // app.get("/api/reviews", getAllReview(reviewCollection));
+        // get all classes
+        app.get("/api/classes", getAllClasses(classCollection));
 
         // // find product by email
         // app.get(
