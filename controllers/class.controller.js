@@ -25,6 +25,7 @@ const createClass = (classCollection) => {
 
         const newClass = await classCollection.insertOne({
             ...req.body,
+            status: "pending",
             enrolledStudents: [],
         });
 

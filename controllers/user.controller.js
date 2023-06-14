@@ -99,7 +99,7 @@ const updateUnselectedClass = (users) => {
     };
 };
 
-// // update product
+// update product
 // const updateProduct = (products) => {
 //     return async (req, res) => {
 //         // Generate a new ObjectId
