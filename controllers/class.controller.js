@@ -1,4 +1,4 @@
-const { ObjectId, ClientSession } = require("mongodb");
+const { ObjectId } = require("mongodb");
 
 // get all classes
 const getAllClasses = (classCollection) => {
@@ -12,27 +12,25 @@ const getAllClasses = (classCollection) => {
     };
 };
 
-// update class's seat
-const updateSelectedClass = (users, classes) => {
+// create a class
+const createClass = (classCollection) => {
     return async (req, res) => {
-        const { email, id } = req.query;
+        const { name, email } = req.body;
+        // find existing user
+        const existingClass = await classCollection.findOne({ name, email });
 
-        // update the user
-        const updatedUser = await users.updateOne(
-            { email: email },
-            { $push: { selectedClasses: id } }
-        );
+        if (existingClass) {
+            return res.json({ error: "Class already exist" });
+        }
 
-        // Generate a new ObjectId
-        const objectId = new ObjectId(id);
-        // update class
-        const updatedClass = await classes.updateOne(
-            { _id: objectId },
-            { $inc: { seats: -1 } }
-        );
+        const newClass = await classCollection.insertOne({
+            ...req.body,
+            enrolledStudents: [],
+        });
 
-        updatedUser.acknowledged && updatedClass.acknowledged
-            ? res.status(200).json({ message: "successfully updated" })
+        // console.log(newUser);
+        newClass.acknowledged
+            ? res.status(200).json({ message: "Class successfully added" })
             : res.status(400).json({ error: "Bad Request" });
     };
 };
@@ -58,6 +56,5 @@ const updateSelectedClass = (users, classes) => {
 
 module.exports = {
     getAllClasses,
-    updateSelectedClass,
-    // getSelectedClass,
+    createClass,
 };

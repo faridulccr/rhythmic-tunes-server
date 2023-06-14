@@ -27,7 +27,7 @@ const getSingleUser = (userCollection) => {
 // create user
 const createUser = (userCollection) => {
     return async (req, res) => {
-        const { name, image, email, role, } = req.body;
+        const { name, image, email, role } = req.body;
         // find existing user
         const existingUser = await userCollection.findOne({ email });
 
@@ -45,6 +45,56 @@ const createUser = (userCollection) => {
         // console.log(newUser);
         newUser.acknowledged
             ? res.status(200).json({ message: "User successfully created" })
+            : res.status(400).json({ error: "Bad Request" });
+    };
+};
+
+// update class's seat
+const updateSelectedClass = (users) => {
+    return async (req, res) => {
+        const { email, id } = req.query;
+
+        // update the user
+        const updatedUser = await users.updateOne(
+            { email: email },
+            { $push: { selectedClasses: id } }
+        );
+
+        // Generate a new ObjectId
+        // const objectId = new ObjectId(id);
+        // // update class
+        // const updatedClass = await classes.updateOne(
+        //     { _id: objectId },
+        //     { $inc: { seats: -1 } }
+        // );
+
+        updatedUser.acknowledged
+            ? res.status(200).json({ message: "successfully updated" })
+            : res.status(400).json({ error: "Bad Request" });
+    };
+};
+
+// update class's seat
+const updateUnselectedClass = (users) => {
+    return async (req, res) => {
+        const { id, email } = req.query;
+
+        // update the user
+        const updatedUser = await users.updateOne(
+            { email: email },
+            { $pull: { selectedClasses: id } }
+        );
+
+        // Generate a new ObjectId
+        // const objectId = new ObjectId(id);
+        // // update class
+        // const updatedClass = await classes.updateOne(
+        //     { _id: objectId },
+        //     { $inc: { seats: -1 } }
+        // );
+
+        updatedUser.acknowledged
+            ? res.status(200).json({ message: "successfully updated" })
             : res.status(400).json({ error: "Bad Request" });
     };
 };
@@ -84,4 +134,6 @@ module.exports = {
     getAllUsers,
     getSingleUser,
     createUser,
+    updateSelectedClass,
+    updateUnselectedClass
 };

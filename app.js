@@ -7,10 +7,12 @@ const {
     getAllUsers,
     getSingleUser,
     createUser,
+    updateSelectedClass,
+    updateUnselectedClass,
 } = require("./controllers/user.controller");
 const {
     getAllClasses,
-    updateSelectedClass,
+    createClass,
 } = require("./controllers/class.controller");
 
 // create express server
@@ -40,6 +42,7 @@ async function run() {
 
         // create a collection for user
         const userCollection = client.db("SummerSchoolDB").collection("users");
+
         // create a collection for classes
         const classCollection = client
             .db("SummerSchoolDB")
@@ -59,6 +62,18 @@ async function run() {
         // create an user
         app.post("/api/create-user", createUser(userCollection));
 
+        // update for selected class by a user
+        app.put(
+            "/api/user/selected-class",
+            updateSelectedClass(userCollection)
+        );
+
+        // update for unselected class by a user
+        app.put(
+            "/api/user/unselected-class",
+            updateUnselectedClass(userCollection)
+        );
+
         // get all classes
         app.get("/api/classes", getAllClasses(classCollection));
 
@@ -68,26 +83,8 @@ async function run() {
         //     getSelectedClass(classCollection)
         // );
 
-        // update class's seat
-        app.put(
-            "/api/selected-class",
-            updateSelectedClass(userCollection, classCollection)
-        );
-
-        // // find product by email
-        // app.get(
-        //     "/api/user-products/:email",
-        //     findProductByEmail(productsCollection)
-        // );
-
-        // // find product by category
-        // app.get(
-        //     "/api/product-category",
-        //     findProductByCategory(productsCollection)
-        // );
-
-        // // create product
-        // app.post("/api/create-product", createProduct(productsCollection));
+        // add a class
+        app.post("/api/add-class", createClass(classCollection));
 
         // // update product
         // app.put("/api/update-product/:id", updateProduct(productsCollection));
