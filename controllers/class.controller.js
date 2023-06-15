@@ -16,6 +16,7 @@ const getAllClasses = (classCollection) => {
 const createClass = (classCollection) => {
     return async (req, res) => {
         const { name, email } = req.body;
+        console.log(req.body);
         // find existing user
         const existingClass = await classCollection.findOne({ name, email });
 
@@ -26,12 +27,30 @@ const createClass = (classCollection) => {
         const newClass = await classCollection.insertOne({
             ...req.body,
             status: "pending",
-            enrolledStudents: [],
+            enrolledStudents: 0,
         });
 
         // console.log(newUser);
         newClass.acknowledged
             ? res.status(200).json({ message: "Class successfully added" })
+            : res.status(400).json({ error: "Bad Request" });
+    };
+};
+
+// update class status
+const updateStatus = (classCollection) => {
+    return async (req, res) => {
+        const { id, status } = req.query;
+        // Generate a new ObjectId
+        const objectId = new ObjectId(id);
+        const updatedClass = await classCollection.updateOne(
+            { _id: objectId },
+            { $set: { status } }
+        );
+        // console.log(updatedClass);
+
+        updatedClass.acknowledged
+            ? res.status(200).json({ message: "Status successfully updated" })
             : res.status(400).json({ error: "Bad Request" });
     };
 };
@@ -58,4 +77,5 @@ const createClass = (classCollection) => {
 module.exports = {
     getAllClasses,
     createClass,
+    updateStatus,
 };

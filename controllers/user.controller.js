@@ -1,4 +1,4 @@
-// const { ObjectId } = require("mongodb");
+const { ObjectId } = require("mongodb");
 
 // get all users
 const getAllUsers = (userCollection) => {
@@ -49,7 +49,7 @@ const createUser = (userCollection) => {
     };
 };
 
-// update class's seat
+// update selected class
 const updateSelectedClass = (users) => {
     return async (req, res) => {
         const { email, id } = req.query;
@@ -60,21 +60,13 @@ const updateSelectedClass = (users) => {
             { $push: { selectedClasses: id } }
         );
 
-        // Generate a new ObjectId
-        // const objectId = new ObjectId(id);
-        // // update class
-        // const updatedClass = await classes.updateOne(
-        //     { _id: objectId },
-        //     { $inc: { seats: -1 } }
-        // );
-
         updatedUser.acknowledged
             ? res.status(200).json({ message: "successfully updated" })
             : res.status(400).json({ error: "Bad Request" });
     };
 };
 
-// update class's seat
+// update unselected class
 const updateUnselectedClass = (users) => {
     return async (req, res) => {
         const { id, email } = req.query;
@@ -99,23 +91,6 @@ const updateUnselectedClass = (users) => {
     };
 };
 
-// update product
-// const updateProduct = (products) => {
-//     return async (req, res) => {
-//         // Generate a new ObjectId
-//         const objectId = new ObjectId(req.params.id);
-//         const updatedProduct = await products.updateOne(
-//             { _id: objectId },
-//             { $set: { ...req.body } }
-//         );
-//         // console.log(updatedProduct);
-
-//         updatedProduct.acknowledged
-//             ? res.status(200).json({ message: "successfully updated" })
-//             : res.status(400).json({ error: "Bad Request" });
-//     };
-// };
-
 // // delete product
 // const deleteProduct = (products) => {
 //     return async (req, res) => {
@@ -135,5 +110,5 @@ module.exports = {
     getSingleUser,
     createUser,
     updateSelectedClass,
-    updateUnselectedClass
+    updateUnselectedClass,
 };

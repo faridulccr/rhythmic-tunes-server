@@ -13,6 +13,7 @@ const {
 const {
     getAllClasses,
     createClass,
+    updateStatus
 } = require("./controllers/class.controller");
 
 // create express server
@@ -86,8 +87,8 @@ async function run() {
         // add a class
         app.post("/api/add-class", createClass(classCollection));
 
-        // // update product
-        // app.put("/api/update-product/:id", updateProduct(productsCollection));
+        // update class status
+        app.put("/api/update-status", updateStatus(classCollection));
 
         // // delete product
         // app.delete(
