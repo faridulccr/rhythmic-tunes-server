@@ -9,13 +9,15 @@ const {
     createUser,
     updateSelectedClass,
     updateUnselectedClass,
-    updateUserRole
+    updateUserRole,
 } = require("./controllers/user.controller");
+
 const {
     getAllClasses,
     createClass,
     updateStatus,
-    sendFeedback
+    sendFeedback,
+    updateEnrolledClass
 } = require("./controllers/class.controller");
 
 // create express server
@@ -71,6 +73,12 @@ async function run() {
             updateSelectedClass(userCollection)
         );
 
+        // update after enroll for a selected class by a user
+        app.put(
+            "/api/user/enrolled-class",
+            updateEnrolledClass(userCollection, classCollection)
+        );
+
         // update for unselected class by a user
         app.put(
             "/api/user/unselected-class",
@@ -82,7 +90,7 @@ async function run() {
 
         // update class status
         app.put("/api/update-status", updateStatus(classCollection));
-        
+
         // send class approved/denied feedback
         app.put("/api/send-feedback", sendFeedback(classCollection));
 

@@ -78,14 +78,6 @@ const updateUnselectedClass = (userCollection) => {
             { $pull: { selectedClasses: id } }
         );
 
-        // Generate a new ObjectId
-        // const objectId = new ObjectId(id);
-        // // update class
-        // const updatedClass = await classes.updateOne(
-        //     { _id: objectId },
-        //     { $inc: { seats: -1 } }
-        // );
-
         updatedUser.acknowledged
             ? res.status(200).json({ message: "successfully updated" })
             : res.status(400).json({ error: "Bad Request" });

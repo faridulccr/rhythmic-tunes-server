@@ -74,6 +74,37 @@ const sendFeedback = (classCollection) => {
     };
 };
 
+// update after enroll for a selected class by a user
+const updateEnrolledClass = (userCollection, classCollection) => {
+    return async (req, res) => {
+        const { id, email } = req.query;
+
+        // selected class to enrolled class
+        const updatedUser = await userCollection.updateOne(
+            { email },
+            {
+                $pull: { selectedClasses: id },
+                $push: { enrolledClasses: id },
+            },
+            { upsert: true }
+        );
+        // console.log(updatedUser);
+
+        // Generate a new ObjectId
+        const objectId = new ObjectId(id);
+        // update class
+        const updatedClass = await classCollection.updateOne(
+            { _id: objectId },
+            { $inc: { seats: -1 } }
+        );
+        // console.log(updatedClass);
+
+        updatedUser.acknowledged && updatedClass.acknowledged
+            ? res.status(200).json({ message: "successfully Enrolled" })
+            : res.status(400).json({ error: "Bad Request" });
+    };
+};
+
 // const getSelectedClass = (classCollection) => {
 //     return async (req, res) => {
 //         const classesID = req.query.classesID.split(",").map((id) => {
@@ -98,4 +129,5 @@ module.exports = {
     createClass,
     updateStatus,
     sendFeedback,
+    updateEnrolledClass,
 };
