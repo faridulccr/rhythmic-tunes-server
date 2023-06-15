@@ -9,11 +9,12 @@ const {
     createUser,
     updateSelectedClass,
     updateUnselectedClass,
+    updateUserRole
 } = require("./controllers/user.controller");
 const {
     getAllClasses,
     createClass,
-    updateStatus
+    updateStatus,
 } = require("./controllers/class.controller");
 
 // create express server
@@ -74,6 +75,12 @@ async function run() {
             "/api/user/unselected-class",
             updateUnselectedClass(userCollection)
         );
+
+        // update user role
+        app.put("/api/update-role", updateUserRole(userCollection));
+
+        // update class status
+        app.put("/api/update-status", updateStatus(classCollection));
 
         // get all classes
         app.get("/api/classes", getAllClasses(classCollection));

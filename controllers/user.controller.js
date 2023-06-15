@@ -41,6 +41,7 @@ const createUser = (userCollection) => {
             email,
             role,
             selectedClasses: [],
+            enrolledClasses: [],
         });
         // console.log(newUser);
         newUser.acknowledged
@@ -50,12 +51,12 @@ const createUser = (userCollection) => {
 };
 
 // update selected class
-const updateSelectedClass = (users) => {
+const updateSelectedClass = (userCollection) => {
     return async (req, res) => {
         const { email, id } = req.query;
 
         // update the user
-        const updatedUser = await users.updateOne(
+        const updatedUser = await userCollection.updateOne(
             { email: email },
             { $push: { selectedClasses: id } }
         );
@@ -67,12 +68,12 @@ const updateSelectedClass = (users) => {
 };
 
 // update unselected class
-const updateUnselectedClass = (users) => {
+const updateUnselectedClass = (userCollection) => {
     return async (req, res) => {
         const { id, email } = req.query;
 
         // update the user
-        const updatedUser = await users.updateOne(
+        const updatedUser = await userCollection.updateOne(
             { email: email },
             { $pull: { selectedClasses: id } }
         );
@@ -87,6 +88,23 @@ const updateUnselectedClass = (users) => {
 
         updatedUser.acknowledged
             ? res.status(200).json({ message: "successfully updated" })
+            : res.status(400).json({ error: "Bad Request" });
+    };
+};
+
+// update user role
+const updateUserRole = (userCollection) => {
+    return async (req, res) => {
+        const { role, email } = req.query;
+
+        // update the user
+        const updatedUser = await userCollection.updateOne(
+            { email: email },
+            { $set: { role } }
+        );
+
+        updatedUser.acknowledged
+            ? res.status(200).json({ message: `Added as ${role}` })
             : res.status(400).json({ error: "Bad Request" });
     };
 };
@@ -111,4 +129,5 @@ module.exports = {
     createUser,
     updateSelectedClass,
     updateUnselectedClass,
+    updateUserRole,
 };
