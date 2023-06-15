@@ -55,6 +55,25 @@ const updateStatus = (classCollection) => {
     };
 };
 
+// send class approved/denied feedback
+const sendFeedback = (classCollection) => {
+    return async (req, res) => {
+        const { id } = req.query;
+        // Generate a new ObjectId
+        const objectId = new ObjectId(id);
+        const updatedClass = await classCollection.updateOne(
+            { _id: objectId },
+            { $set: { feedback: req.body.message } },
+            { upsert: true }
+        );
+        // console.log(updatedClass);
+
+        updatedClass.acknowledged
+            ? res.status(200).json({ message: "Feedback successfully sent" })
+            : res.status(400).json({ error: "Bad Request" });
+    };
+};
+
 // const getSelectedClass = (classCollection) => {
 //     return async (req, res) => {
 //         const classesID = req.query.classesID.split(",").map((id) => {
@@ -78,4 +97,5 @@ module.exports = {
     getAllClasses,
     createClass,
     updateStatus,
+    sendFeedback,
 };

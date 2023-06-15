@@ -15,6 +15,7 @@ const {
     getAllClasses,
     createClass,
     updateStatus,
+    sendFeedback
 } = require("./controllers/class.controller");
 
 // create express server
@@ -81,6 +82,9 @@ async function run() {
 
         // update class status
         app.put("/api/update-status", updateStatus(classCollection));
+        
+        // send class approved/denied feedback
+        app.put("/api/send-feedback", sendFeedback(classCollection));
 
         // get all classes
         app.get("/api/classes", getAllClasses(classCollection));
