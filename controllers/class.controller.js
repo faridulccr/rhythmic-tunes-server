@@ -95,7 +95,7 @@ const updateEnrolledClass = (userCollection, classCollection) => {
         // update class
         const updatedClass = await classCollection.updateOne(
             { _id: objectId },
-            { $inc: { seats: -1 } }
+            { $inc: { seats: -1, enrolledStudents: 1 } }
         );
         // console.log(updatedClass);
 
