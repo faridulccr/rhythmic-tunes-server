@@ -2,15 +2,16 @@ const stripe = require("stripe")(process.env.STRIPE_SK);
 
 const createPayment = async (req, res) => {
     // Create a PaymentIntent with the order amount and currency
-    const { client_secret } = await stripe.paymentIntents.create({
-        amount: parseFloat(req.query.price),
+    const paymentIntent = await stripe.paymentIntents.create({
+        amount: Math.floor(req.query.price * 100),
         currency: "usd",
-        automatic_payment_methods: {
-            enabled: true,
-        },
+        // automatic_payment_methods: {
+        //     enabled: true,
+        // },
+        payment_method_types: ["card"],
     });
 
-    res.send({ clientSecret: client_secret });
+    res.send({ clientSecret: paymentIntent.client_secret });
 };
 
 module.exports = { createPayment };
