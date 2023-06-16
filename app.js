@@ -17,8 +17,9 @@ const {
     createClass,
     updateStatus,
     sendFeedback,
-    updateEnrolledClass
+    updateEnrolledClass,
 } = require("./controllers/class.controller");
+const { createPayment } = require("./controllers/payment.controller");
 
 // create express server
 const app = express();
@@ -73,12 +74,6 @@ async function run() {
             updateSelectedClass(userCollection)
         );
 
-        // update after enroll for a selected class by a user
-        app.put(
-            "/api/user/enrolled-class",
-            updateEnrolledClass(userCollection, classCollection)
-        );
-
         // update for unselected class by a user
         app.put(
             "/api/user/unselected-class",
@@ -108,6 +103,15 @@ async function run() {
 
         // update class status
         app.put("/api/update-status", updateStatus(classCollection));
+
+        // create payment
+        app.post("/api/create-payment-intent", createPayment);
+
+        // update after enroll for a selected class by a user
+        app.put(
+            "/api/enrolled-class",
+            updateEnrolledClass(userCollection, classCollection)
+        );
 
         // // delete product
         // app.delete(

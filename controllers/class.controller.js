@@ -77,21 +77,21 @@ const sendFeedback = (classCollection) => {
 // update after enroll for a selected class by a user
 const updateEnrolledClass = (userCollection, classCollection) => {
     return async (req, res) => {
-        const { id, email } = req.query;
+        const { classID, email } = req.query;
 
         // selected class to enrolled class
         const updatedUser = await userCollection.updateOne(
             { email },
             {
-                $pull: { selectedClasses: id },
-                $push: { enrolledClasses: id },
+                $pull: { selectedClasses: classID },
+                $push: { enrolledClasses: classID },
             },
             { upsert: true }
         );
         // console.log(updatedUser);
 
         // Generate a new ObjectId
-        const objectId = new ObjectId(id);
+        const objectId = new ObjectId(classID);
         // update class
         const updatedClass = await classCollection.updateOne(
             { _id: objectId },
