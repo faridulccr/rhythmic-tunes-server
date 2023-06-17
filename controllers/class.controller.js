@@ -88,7 +88,10 @@ const updateEnrolledClass = (userCollection, classCollection) => {
             { email },
             {
                 $set: {
-                    enrolledClasses: user.selectedClasses,
+                    enrolledClasses: [
+                        ...user.enrolledClasses,
+                        ...user.selectedClasses,
+                    ],
                     selectedClasses: [],
                     isEnrolled: true,
                 },
