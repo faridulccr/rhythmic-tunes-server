@@ -92,7 +92,7 @@ const updateUserRole = (userCollection) => {
         // update the user
         const updatedUser = await userCollection.updateOne(
             { email: email },
-            { $set: { role } }
+            { $set: { role, classesTaken: 0, classes: [], students: 0 } }
         );
 
         updatedUser.acknowledged
